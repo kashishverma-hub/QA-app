@@ -47,12 +47,16 @@ if uploaded_file is not None and st.sidebar.button("Process Document"):
         tmp_file.write(uploaded_file.read())
         tmp_path = tmp_file.name
 
-    with st.spinner("Document process ho raha hai (chunking + embeddings)..."):
-        vectorstore, chunks = process_uploaded_file(tmp_path)
-        st.session_state.vectorstore = vectorstore
-        st.session_state.chunks = chunks
-        st.session_state.qa_chain = build_qa_chain(vectorstore)
-        st.session_state.chat_history = []
+        with st.spinner("Document process ho raha hai (chunking + embeddings)..."):
+        try:
+            vectorstore, chunks = process_uploaded_file(tmp_path)
+            st.session_state.vectorstore = vectorstore
+            st.session_state.chunks = chunks
+            st.session_state.qa_chain = build_qa_chain(vectorstore)
+            st.session_state.chat_history = []
+        except Exception as e:
+            st.error(f"Asli error yeh hai: {e}")
+            st.stop()
 
     os.remove(tmp_path)
     st.sidebar.success("Document ready hai! Ab sawaal pooch sakte ho.")
