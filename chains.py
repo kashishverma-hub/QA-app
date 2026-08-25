@@ -6,28 +6,23 @@ Yeh file do cheezein banati hai:
 2. Summarization chain (jo lambe documents ka summary banati hai)
 """
 
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.chains.summarize import load_summarize_chain
 
 
-def get_llm(model="gpt-4o-mini", temperature=0):
+def get_llm(model="gemini-2.0-flash", temperature=0):
     """
     LLM ka instance banata hai. temperature=0 rakha hai taaki
     jawab consistent aur factual rahen (creative nahi).
     """
-    return ChatOpenAI(model=model, temperature=temperature)
+    return ChatGoogleGenerativeAI(model=model, temperature=temperature)
 
 
 def build_qa_chain(vectorstore):
     """
     Context-aware retrieval chain banata hai.
-
-    ConversationBufferMemory pichle sawaal-jawab yaad rakhti hai,
-    isliye agar user pehle "yeh policy kya hai?" pooche aur phir
-    "iske exceptions kya hain?" pooche, toh app samjhega ki "iske"
-    ka matlab wahi policy hai — yehi "context-aware" hone ka matlab hai.
     """
     llm = get_llm()
 
@@ -48,10 +43,7 @@ def build_qa_chain(vectorstore):
 
 def build_summarization_chain():
     """
-    map_reduce type summarization chain banata hai — yeh pehle
-    har chunk ka chhota summary banata hai, phir un sab chhote
-    summaries ko jodkar final summary banata hai. Lambe documents
-    ke liye yeh approach best kaam karta hai.
+    map_reduce type summarization chain banata hai.
     """
     llm = get_llm()
     return load_summarize_chain(llm, chain_type="map_reduce")
