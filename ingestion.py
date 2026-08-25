@@ -10,7 +10,7 @@ import os
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 
 def load_document(file_path: str):
@@ -31,9 +31,7 @@ def load_document(file_path: str):
 
 def split_documents(documents, chunk_size=1000, chunk_overlap=200):
     """
-    Bade documents ko chhote paragraphs (chunks) me todta hai,
-    taaki Chroma DB mein har chunk ko alag se store aur search
-    kiya ja sake.
+    Bade documents ko chhote paragraphs (chunks) me todta hai.
     """
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -44,11 +42,10 @@ def split_documents(documents, chunk_size=1000, chunk_overlap=200):
 
 def build_vectorstore(chunks, persist_directory="chroma_db"):
     """
-    Chunks ko embeddings (numbers) mein convert karke Chroma DB
-    mein store karta hai. persist_directory wo folder hai jahan
-    Chroma yeh data disk pe save karega.
+    Chunks ko Google Gemini embeddings (numbers) mein convert karke
+    Chroma DB mein store karta hai.
     """
-    embeddings = OpenAIEmbeddings()
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
     vectorstore = Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
@@ -60,7 +57,6 @@ def build_vectorstore(chunks, persist_directory="chroma_db"):
 def process_uploaded_file(file_path: str, persist_directory="chroma_db"):
     """
     Poora pipeline: load -> split -> Chroma DB mein store karo.
-    Yeh function app.py se call hoga.
     """
     documents = load_document(file_path)
     chunks = split_documents(documents)
