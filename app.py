@@ -20,11 +20,11 @@ st.set_page_config(page_title="Enterprise Document Assistant", layout="wide")
 st.title("Context-Aware Document Q&A & Summarization Assistant")
 
 # ---------- SIDEBAR: API KEY ----------
-api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+api_key = st.sidebar.text_input("Google API Key", type="password")
 if not api_key:
-    st.info("Shuru karne ke liye sidebar mein apni OpenAI API Key daalo.")
+    st.info("Shuru karne ke liye sidebar mein apni Google API Key daalo.")
     st.stop()
-os.environ["OPENAI_API_KEY"] = api_key
+os.environ["GOOGLE_API_KEY"] = api_key
 
 # ---------- SESSION STATE SETUP ----------
 if "vectorstore" not in st.session_state:
@@ -102,11 +102,4 @@ if st.session_state.vectorstore is not None:
 
     # ---- TAB 2: SUMMARIZATION ----
     with tab2:
-        st.write("Poore document ka summary generate karo.")
-        if st.button("Summary Banao"):
-            with st.spinner("Summary taiyaar ho rahi hai..."):
-                summary = summarize_documents(st.session_state.chunks)
-                st.write(summary)
-
-else:
-    st.info("Shuru karne ke liye sidebar se ek document upload karo aur 'Process Document' dabao.")
+        st.write("Poore
