@@ -47,7 +47,7 @@ if uploaded_file is not None and st.sidebar.button("Process Document"):
         tmp_file.write(uploaded_file.read())
         tmp_path = tmp_file.name
 
-        with st.spinner("Document process ho raha hai (chunking + embeddings)..."):
+    with st.spinner("Document process ho raha hai (chunking + embeddings)..."):
         try:
             vectorstore, chunks = process_uploaded_file(tmp_path)
             st.session_state.vectorstore = vectorstore
