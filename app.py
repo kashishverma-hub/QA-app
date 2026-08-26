@@ -22,7 +22,7 @@ st.title("Context-Aware Document Q&A & Summarization Assistant")
 # ---------- SIDEBAR: API KEY ----------
 api_key = st.sidebar.text_input("Google API Key", type="password")
 if not api_key:
-    st.info("Shuru karne ke liye sidebar mein apni Google API Key daalo.")
+    st.info("Please Enter Google API Key.")
     st.stop()
 os.environ["GOOGLE_API_KEY"] = api_key
 
@@ -38,7 +38,7 @@ if "chat_history" not in st.session_state:
 
 # ---------- FILE UPLOAD ----------
 uploaded_file = st.sidebar.file_uploader(
-    "Document upload karo", type=["pdf", "docx", "txt"]
+    "Upload the Document", type=["pdf", "docx", "txt"]
 )
 
 if uploaded_file is not None and st.sidebar.button("Process Document"):
@@ -47,7 +47,7 @@ if uploaded_file is not None and st.sidebar.button("Process Document"):
         tmp_file.write(uploaded_file.read())
         tmp_path = tmp_file.name
 
-    with st.spinner("Document process ho raha hai (chunking + embeddings)..."):
+    with st.spinner("Document is processing (chunking + embeddings)..."):
         try:
             vectorstore, chunks = process_uploaded_file(tmp_path)
             st.session_state.vectorstore = vectorstore
@@ -59,7 +59,7 @@ if uploaded_file is not None and st.sidebar.button("Process Document"):
             st.stop()
 
     os.remove(tmp_path)
-    st.sidebar.success("Document ready hai! Ab sawaal pooch sakte ho.")
+    st.sidebar.success("Document is ready .")
 
 # ---------- MAIN AREA: TABS ----------
 if st.session_state.vectorstore is not None:
@@ -73,7 +73,7 @@ if st.session_state.vectorstore is not None:
             with st.chat_message(msg["role"]):
                 st.write(msg["content"])
 
-        user_question = st.chat_input("Apna sawaal yahan likho...")
+        user_question = st.chat_input("Type your question:")
 
         if user_question:
             st.session_state.chat_history.append(
@@ -82,7 +82,7 @@ if st.session_state.vectorstore is not None:
             with st.chat_message("user"):
                 st.write(user_question)
 
-            with st.spinner("Soch raha hoon..."):
+            with st.spinner("Thinking..."):
                 result = st.session_state.qa_chain.invoke(
                     {"question": user_question}
                 )
@@ -91,7 +91,7 @@ if st.session_state.vectorstore is not None:
             with st.chat_message("assistant"):
                 st.write(answer)
 
-                with st.expander("Sources dekho"):
+                with st.expander("Sources "):
                     for doc in result.get("source_documents", []):
                         page = doc.metadata.get("page", "N/A")
                         st.caption(f"Page {page}: {doc.page_content[:200]}...")
@@ -102,11 +102,11 @@ if st.session_state.vectorstore is not None:
 
     # ---- TAB 2: SUMMARIZATION ----
     with tab2:
-        st.write("Poore document ka summary generate karo.")
-        if st.button("Summary Banao"):
-            with st.spinner("Summary taiyaar ho rahi hai..."):
+        st.write("Generate summary.")
+        if st.button("Create Summary"):
+            with st.spinner("Summary is preparing..."):
                 summary = summarize_documents(st.session_state.chunks)
                 st.write(summary)
 
 else:
-    st.info("Shuru karne ke liye sidebar se ek document upload karo aur 'Process Document' dabao.")
+    st.info("Upload the document in sidebar to start.")
