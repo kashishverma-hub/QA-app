@@ -12,7 +12,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains.summarize import load_summarize_chain
 
 
-def get_llm(model="gemini-2.0-flash", temperature=0):
+def get_llm(model="gemini-flash-latest", temperature=0):
     """
     LLM ka instance banata hai. temperature=0 rakha hai taaki
     jawab consistent aur factual rahen (creative nahi).
