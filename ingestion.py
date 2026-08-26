@@ -45,7 +45,7 @@ def build_vectorstore(chunks, persist_directory="chroma_db"):
     Chunks ko Google Gemini embeddings (numbers) mein convert karke
     Chroma DB mein store karta hai.
     """
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
     vectorstore = Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
