@@ -55,7 +55,7 @@ if uploaded_file is not None and st.sidebar.button("Process Document"):
             st.session_state.qa_chain = build_qa_chain(vectorstore)
             st.session_state.chat_history = []
         except Exception as e:
-            st.error(f"Asli error yeh hai: {e}")
+            st.error(f"Error: {e}")
             st.stop()
 
     os.remove(tmp_path)
@@ -67,7 +67,7 @@ if st.session_state.vectorstore is not None:
 
     # ---- TAB 1: CHAT-BASED Q&A ----
     with tab1:
-        st.write("Is document ke baare me kuch bhi pucho. App pichli baatcheet yaad rakhega.")
+        st.write("Ask Your question.")
 
         for msg in st.session_state.chat_history:
             with st.chat_message(msg["role"]):
