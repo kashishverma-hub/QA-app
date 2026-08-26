@@ -51,7 +51,7 @@ def build_summarization_chain():
     map_reduce type summarization chain banata hai.
     """
     llm = get_llm()
-    return load_summarize_chain(llm, chain_type="map_reduce")
+    return load_summarize_chain(llm, chain_type="stuff")
 
 
 def summarize_documents(chunks):
